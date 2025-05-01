@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: app
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/group.name: my-apps
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /add
+            pathType: Prefix
+            backend:
+              service:
+                name: app-add-svc
+                port:
+                  number: 80
+          - path: /latest
+            pathType: Prefix
+            backend:
+              service:
+                name: app-latest-svc
+                port:
+                  number: 80
